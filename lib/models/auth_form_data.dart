@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'dart:io';
 
 enum AuthMode { SIGNUP, LOGIN }
 
