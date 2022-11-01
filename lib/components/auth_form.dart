@@ -13,7 +13,8 @@ class _AuthFormState extends State<AuthForm> {
   final _authFormData = AuthFormData();
 
   void _submit() {
-    _formKey.currentState?.validate();
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (!isValid) return;
   }
 
   @override
@@ -32,16 +33,34 @@ class _AuthFormState extends State<AuthForm> {
                     initialValue: _authFormData.name,
                     onChanged: (name) => _authFormData.name = name,
                     decoration: InputDecoration(labelText: 'Nome'),
+                    validator: (_data) {
+                      final data = _data ?? '';
+                      if (data.trim().length < 5) {
+                        return 'Nome deve ter no minimo 5 caracteres';
+                      }
+                    },
                   ),
                 TextFormField(
-                  key: ValueKey('email'),
-                  decoration: InputDecoration(labelText: 'E-Mail'),
-                ),
+                    key: ValueKey('email'),
+                    initialValue: _authFormData.email,
+                    decoration: InputDecoration(labelText: 'E-Mail'),
+                    validator: (_data) {
+                      final data = _data ?? '';
+                      if (!data.contains('@')) {
+                        return 'E-mail informado não é valido';
+                      }
+                    }),
                 TextFormField(
-                  key: ValueKey('password'),
-                  obscureText: true,
-                  decoration: InputDecoration(labelText: 'Senha'),
-                ),
+                    key: ValueKey('password'),
+                    initialValue: _authFormData.password,
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: 'Senha'),
+                    validator: (_data) {
+                      final data = _data ?? '';
+                      if (data.trim().length < 6) {
+                        return 'Senha deve ter no minimo 6 caracteres';
+                      }
+                    }),
                 SizedBox(
                   height: 12,
                 ),
