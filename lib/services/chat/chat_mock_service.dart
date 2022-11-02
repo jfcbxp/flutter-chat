@@ -13,7 +13,14 @@ class ChatMockService implements ChatService {
         createdAt: DateTime.now(),
         userId: '1',
         userName: 'teste',
-        userImageUrl: 'assets/images/avatar.png')
+        userImageUrl: 'assets/images/avatar.png'),
+    ChatMessage(
+        id: '2',
+        text: 'teste2',
+        createdAt: DateTime.now(),
+        userId: '2',
+        userName: 'teste2',
+        userImageUrl: 'assets/images/avatar.png'),
   ];
   static MultiStreamController<List<ChatMessage>>? _controller;
   static final _msgsStream = Stream<List<ChatMessage>>.multi((controller) {
