@@ -69,6 +69,7 @@ class _AuthFormState extends State<AuthForm> {
                 TextFormField(
                     key: ValueKey('email'),
                     initialValue: _authFormData.email,
+                    onChanged: (email) => _authFormData.email = email,
                     decoration: InputDecoration(labelText: 'E-Mail'),
                     validator: (_data) {
                       final data = _data ?? '';
@@ -79,6 +80,7 @@ class _AuthFormState extends State<AuthForm> {
                 TextFormField(
                     key: ValueKey('password'),
                     initialValue: _authFormData.password,
+                    onChanged: (password) => _authFormData.password = password,
                     obscureText: true,
                     decoration: InputDecoration(labelText: 'Senha'),
                     validator: (_data) {
