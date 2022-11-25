@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.chat">
+    package="br.com.jfcbxp.chat">
    <application
         android:label="chat"
         android:name="${applicationName}"

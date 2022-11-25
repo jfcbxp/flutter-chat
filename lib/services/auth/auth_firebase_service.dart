@@ -67,9 +67,8 @@ class AuthFirebaseService implements AuthService {
 
     final storage = FirebaseStorage.instance;
     final imageRef = storage.ref().child('user_images').child(imageName);
-    await imageRef.putFile(image).whenComplete(() async {
-      return await imageRef.getDownloadURL();
-    });
+    await imageRef.putFile(image).whenComplete(() {});
+    return await imageRef.getDownloadURL();
   }
 
   Future<void> _saveChatUser(ChatUser user) async {
