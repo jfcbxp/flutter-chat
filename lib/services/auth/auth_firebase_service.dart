@@ -1,12 +1,10 @@
-import 'dart:math';
-
 import 'package:chat/models/chat_user.dart';
 import 'dart:io';
 import 'dart:async';
-
 import 'package:chat/services/auth/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthFirebaseService implements AuthService {
@@ -38,20 +36,30 @@ class AuthFirebaseService implements AuthService {
 
   @override
   Future<void> signup(
-      String nome, String email, String password, File? image) async {
-    final auth = FirebaseAuth.instance;
+      String name, String email, String password, File? image) async {
+    final signup = await Firebase.initializeApp(
+      name: 'userSignup',
+      options: Firebase.app().options,
+    );
+
+    final auth = FirebaseAuth.instanceFor(app: signup);
+
     UserCredential credential = await auth.createUserWithEmailAndPassword(
-        email: email, password: password);
+      email: email,
+      password: password,
+    );
 
-    if (credential.user == null) return;
+    if (credential.user != null) {
+      final imageName = '${credential.user!.uid}.jpg';
+      final imageUrl = await _uploadUserImage(image, imageName);
+      await credential.user?.updateDisplayName(name);
+      await credential.user?.updatePhotoURL(imageUrl);
+      await login(email, password);
+      _currentUser = _toChatUser(credential.user!, name, imageUrl);
+      await _saveChatUser(_currentUser!);
+    }
 
-    final imageName = '${credential.user!.uid}.jpg';
-    final imageURL = await _uploadUserImage(image, imageName);
-
-    await credential.user?.updateDisplayName(nome);
-    await credential.user?.updatePhotoURL(imageURL);
-
-    //await _saveChatUser(_toChatUser(credential.user!, imageURL));
+    await signup.delete();
   }
 
   Future<String?> _uploadUserImage(File? image, String imageName) async {
@@ -71,10 +79,10 @@ class AuthFirebaseService implements AuthService {
         {'name': user.name, 'email': user.email, 'imageURL': user.imageUrl});
   }
 
-  static ChatUser _toChatUser(User user, [String? imageUrl]) {
+  static ChatUser _toChatUser(User user, [String? name, String? imageUrl]) {
     return ChatUser(
         id: user.uid,
-        name: user.displayName ?? user.email!.split('@')[0],
+        name: name ?? user.displayName ?? user.email!.split('@')[0],
         email: user.email!,
         imageUrl: imageUrl ?? user.photoURL ?? 'assets/images/avatar.png');
   }

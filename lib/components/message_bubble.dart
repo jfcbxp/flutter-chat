@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:chat/models/chat_message.dart';
 import 'package:flutter/material.dart';
 

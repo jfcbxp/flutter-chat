@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:chat/models/chat_user.dart';
 import 'package:chat/services/auth/auth_firebase_service.dart';
 
