@@ -3,6 +3,7 @@ import 'package:chat/models/chat_message.dart';
 import 'package:chat/services/chat/chat_service.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ntp/ntp.dart';
 
 class ChatFirebaseService implements ChatService {
   @override
@@ -28,7 +29,7 @@ class ChatFirebaseService implements ChatService {
     final msg = ChatMessage(
       id: '',
       text: text,
-      createdAt: DateTime.now(),
+      createdAt: await NTP.now(),
       userId: user.id,
       userName: user.name,
       userImageUrl: user.imageUrl,
